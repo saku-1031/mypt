@@ -1,6 +1,69 @@
 # Voice MCP Hub - 設計ドキュメント
 
-音声アシスタントシステム「Voice MCP Hub」の設計仕様書です。
+音声アシスタントシステム「Voice MCP Hub」の設計仕様書と実装です。
+
+## 🚀 クイックスタート
+
+### インストール
+
+```bash
+# 依存パッケージのインストール
+npm install
+```
+
+### デモの実行
+
+```bash
+# デモを実行（TypeScriptを直接実行）
+npm run demo
+```
+
+デモでは以下のユースケースを実演します：
+- **A) 単一アクション**: カレンダーに予定を追加
+- **B) Barge-in**: 予定の時間を変更
+- **C) 複数アプリ連携**: メモ作成 + タスク追加
+
+### 開発モード
+
+```bash
+# 開発サーバー起動（ファイル監視）
+npm run dev
+
+# TypeScriptをビルド
+npm run build
+
+# ビルド済みコードを実行
+npm start
+```
+
+## 📁 プロジェクト構造
+
+```
+mypt/
+├── src/
+│   ├── core/              # コアシステム
+│   │   ├── event-bus.ts   # イベントバス
+│   │   ├── session-manager.ts
+│   │   ├── nlu.ts         # インテント抽出
+│   │   └── orchestrator.ts
+│   ├── capabilities/      # MCP capabilities
+│   │   ├── calendar.ts
+│   │   ├── memo.ts
+│   │   └── task.ts
+│   ├── types/             # 型定義
+│   │   ├── events.ts
+│   │   └── mcp.ts
+│   ├── utils/             # ユーティリティ
+│   │   ├── mock-asr.ts
+│   │   └── mock-tts.ts
+│   ├── index.ts           # メインエントリーポイント
+│   └── demo.ts            # デモコード
+├── schemas/
+│   └── event_bus_schema.json
+├── package.json
+├── tsconfig.json
+└── README.md
+```
 
 ## 🧩 全体構造図（層＋音声入出力＋ユーザー設定）
 
