@@ -45,6 +45,7 @@ interface TranscribeResult {
   text?: string;
   language?: string;
   durationInSeconds?: number;
+  confidence?: number;
   error?: string;
 }
 
@@ -70,6 +71,7 @@ export async function transcribeAudioAction({
       text: result.text,
       language: result.language,
       durationInSeconds: result.durationInSeconds,
+      confidence: result.confidence,
     };
   } catch (err) {
     const message = err instanceof Error ? err.message : "文字起こしに失敗しました。";

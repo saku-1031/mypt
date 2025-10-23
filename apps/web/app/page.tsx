@@ -21,6 +21,9 @@ const VOICE_OPTIONS = [
   { value: "shimmer", label: "Shimmer" },
 ];
 
+// Capture microphone chunks every 250ms for responsive recording
+const CHUNK_INTERVAL_MS = 250;
+
 function base64ToObjectUrl(base64: string, mimeType: string): string {
   if (typeof window === "undefined") return "";
   const binary = window.atob(base64);
@@ -150,14 +153,13 @@ export default function HomePage() {
           `source: file`,
           `language: ${result.language ?? "unknown"}`,
           `duration: ${result.durationInSeconds ?? "-"}s`,
+          `confidence: ${result.confidence !== undefined ? (result.confidence * 100).toFixed(1) + "%" : "-"}`,
         ].join("\n")
       );
       setTranscript(result.text);
       setText(result.text);
     });
   };
-
-  const CHUNK_INTERVAL_MS = 250; // capture microphone chunks every 250ms for responsive transcription
 
   const handleRecordToggle = async () => {
     if (isRecording) {
@@ -225,6 +227,7 @@ export default function HomePage() {
               `source: microphone`,
               `language: ${result.language ?? "unknown"}`,
               `duration: ${result.durationInSeconds ?? "-"}s`,
+              `confidence: ${result.confidence !== undefined ? (result.confidence * 100).toFixed(1) + "%" : "-"}`,
             ].join("\n")
           );
           setTranscript(result.text);

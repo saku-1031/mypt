@@ -1,18 +1,15 @@
-/// <reference lib="dom" />
+import { SpeechClient, protos } from "@google-cloud/speech";
 
-const EXT_BY_MIME: Record<string, string> = {
-  "audio/flac": "flac",
-  "audio/m4a": "m4a",
-  "audio/x-m4a": "m4a",
-  "audio/mp4": "m4a",
-  "audio/mpeg": "mp3",
-  "audio/mp3": "mp3",
-  "audio/mpga": "mpga",
-  "audio/oga": "oga",
-  "audio/ogg": "ogg",
-  "audio/wav": "wav",
-  "audio/x-wav": "wav",
-  "audio/webm": "webm",
+// MIME type to encoding mapping for Google Cloud Speech
+const ENCODING_BY_MIME: Record<string, protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding> = {
+  "audio/flac": protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding.FLAC,
+  "audio/wav": protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding.LINEAR16,
+  "audio/x-wav": protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding.LINEAR16,
+  "audio/mpeg": protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding.MP3,
+  "audio/mp3": protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding.MP3,
+  "audio/ogg": protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding.OGG_OPUS,
+  "audio/webm": protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding.WEBM_OPUS,
+  "audio/webm;codecs=opus": protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding.WEBM_OPUS,
 };
 
 export interface SpeechRecognitionOptions {
@@ -20,12 +17,15 @@ export interface SpeechRecognitionOptions {
   mimeType?: string;
   language?: string;
   filenameHint?: string;
+  enableDiarization?: boolean;
+  phraseHints?: string[];
 }
 
 export interface SpeechRecognitionResult {
   text: string;
   language?: string;
   durationInSeconds?: number;
+  confidence?: number;
 }
 
 function asUint8Array(source: ArrayBuffer | ArrayBufferView): Uint8Array {
@@ -37,43 +37,77 @@ function asUint8Array(source: ArrayBuffer | ArrayBufferView): Uint8Array {
   throw new TypeError("Unsupported audio input type");
 }
 
+let clientInstance: SpeechClient | null = null;
+
+function getSpeechClient(): SpeechClient {
+  if (!clientInstance) {
+    // Google Cloud will use GOOGLE_APPLICATION_CREDENTIALS env var automatically
+    clientInstance = new SpeechClient();
+  }
+  return clientInstance;
+}
+
 export async function transcribeAudio(
   audio: ArrayBuffer | ArrayBufferView,
   {
-    model = "whisper-1",
-    mimeType = "audio/mp4", // default aligns with iOS recordings; callers should set actual type when known
-    language,
-    filenameHint = "audio",
+    model = "latest_long",
+    mimeType = "audio/webm",
+    language = "ja-JP",
+    enableDiarization = false,
+    phraseHints = [],
   }: SpeechRecognitionOptions = {}
 ): Promise<SpeechRecognitionResult> {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  if (typeof FormData === "undefined" || typeof Blob === "undefined") {
-    throw new Error("FormData/Blob constructors are not available in this runtime");
+  const client = getSpeechClient();
+  const audioBytes = asUint8Array(audio);
+
+  // Determine encoding from MIME type
+  const encoding = ENCODING_BY_MIME[mimeType] ||
+    protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding.WEBM_OPUS;
+
+  const request: protos.google.cloud.speech.v1.IRecognizeRequest = {
+    config: {
+      encoding,
+      languageCode: language,
+      model,
+      enableAutomaticPunctuation: true,
+      enableWordTimeOffsets: false,
+      diarizationConfig: enableDiarization ? {
+        enableSpeakerDiarization: true,
+        minSpeakerCount: 2,
+        maxSpeakerCount: 6,
+      } : undefined,
+      speechContexts: phraseHints.length > 0 ? [{
+        phrases: phraseHints,
+        boost: 20,
+      }] : undefined,
+    },
+    audio: {
+      content: audioBytes,
+    },
+  };
+
+  const [response] = await client.recognize(request);
+
+  if (!response.results || response.results.length === 0) {
+    throw new Error("No transcription results returned from Google Cloud Speech");
   }
 
-  const formData = new FormData();
-  formData.set("model", model);
-  if (language) formData.set("language", language);
+  // Combine all transcripts
+  const transcript = response.results
+    .map((result) => result.alternatives?.[0]?.transcript || "")
+    .join(" ")
+    .trim();
 
-  const blob = new Blob([asUint8Array(audio)], { type: mimeType });
-  formData.append("file", blob, `${filenameHint}.${EXT_BY_MIME[mimeType] ?? "mp4"}`);
+  const firstAlternative = response.results[0]?.alternatives?.[0];
+  const confidence = firstAlternative?.confidence ?? undefined;
 
-  const endpoint = `${process.env.OPENAI_BASE_URL || "https://api.openai.com/v1"}/audio/transcriptions`;
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}` },
-    body: formData,
-  });
+  // Extract detected language if available
+  const detectedLanguage = response.results[0]?.languageCode || language;
 
-  if (!response.ok) {
-    throw new Error(`Transcription failed: ${response.status} ${response.statusText} - ${await response.text()}`);
-  }
-
-  const payload = await response.json();
   return {
-    text: payload.text ?? "",
-    language: payload.language ?? undefined,
-    durationInSeconds: payload.duration ?? undefined,
+    text: transcript,
+    language: detectedLanguage,
+    confidence,
+    durationInSeconds: undefined, // Google Cloud doesn't return duration in basic response
   };
 }

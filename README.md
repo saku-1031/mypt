@@ -27,15 +27,15 @@ Dockerを使わず、TypeScript＋Swift（iOS）で動くMVP構成。
 
 ## 🧩 技術スタック
 
-| 層          | 技術                             | 役割                                   |
-| ---------- | ------------------------------ | ------------------------------------ |
-| **LLM層**   | OpenAI GPT-4o / GPT-4o-mini    | 意図抽出＋ツール決定＋要約                        |
-| **ASR**    | OpenAI Whisper API             | 音声→テキスト変換                            |
-| **TTS**    | OpenAI TTS API（またはPiper）       | テキスト→音声生成                            |
-| **MCPツール** | memo / calendar / music（独自実装）  | 外部アプリ操作（将来拡張）                        |
-| **Web**    | Next.js（apps/web）              | 設定UI・ログ確認                            |
-| **iOS**    | Swift (AVAudio / Notification) | 録音→送信→再生・トリガ制御                       |
-| **サーバ**    | Node.js 20 / TypeScript        | `/asr`, `/agent`, `/tts` API・MCP Hub |
+| 層          | 技術                                  | 役割                                   |
+| ---------- | ----------------------------------- | ------------------------------------ |
+| **LLM層**   | OpenAI GPT-4o / GPT-4o-mini         | 意図抽出＋ツール決定＋要約                        |
+| **ASR**    | Google Cloud Speech-to-Text (Chirp) | 音声→テキスト変換（98%精度・話者分離対応）             |
+| **TTS**    | OpenAI TTS API（またはPiper）            | テキスト→音声生成                            |
+| **MCPツール** | memo / calendar / music（独自実装）       | 外部アプリ操作（将来拡張）                        |
+| **Web**    | Next.js（apps/web）                   | 設定UI・ログ確認                            |
+| **iOS**    | Swift (AVAudio / Notification)      | 録音→送信→再生・トリガ制御                       |
+| **サーバ**    | Node.js 20 / TypeScript             | `/asr`, `/agent`, `/tts` API・MCP Hub |
 
 ---
 
@@ -83,12 +83,36 @@ cp .env.example .env
 
 `.env` の例：
 
-```
+```bash
+# OpenAI API Configuration (TTS)
 OPENAI_API_KEY=sk-xxxx
+OPENAI_BASE_URL=https://api.openai.com/v1
 OPENAI_MODEL_CHAT=gpt-4o-mini
-OPENAI_MODEL_WHISPER=whisper-1
 OPENAI_MODEL_TTS=gpt-4o-mini-tts
+
+# Google Cloud Speech-to-Text Configuration (ASR)
+# サービスアカウントキーファイルのパスを指定
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account-key.json
+# プロジェクトID（オプション）
+GOOGLE_CLOUD_PROJECT=your-project-id
 ```
+
+### Google Cloud認証設定
+
+#### 方法1: サービスアカウントキー（ローカル開発推奨）
+
+1. [Google Cloud Console](https://console.cloud.google.com/) でプロジェクトを作成
+2. Speech-to-Text API を有効化
+3. サービスアカウントを作成してJSONキーをダウンロード
+4. `.env` に `GOOGLE_APPLICATION_CREDENTIALS` でキーファイルのパスを指定
+
+```bash
+GOOGLE_APPLICATION_CREDENTIALS=/Users/you/mypt/keys/gcp-service-account.json
+```
+
+#### 方法2: Workload Identity（本番環境）
+
+Google Cloud Run や GKE で実行する場合は、Workload Identity を使用すれば環境変数不要で自動認証されます。
 
 ### 2. ローカル起動（Node）
 
