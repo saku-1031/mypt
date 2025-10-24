@@ -1,0 +1,16 @@
+{
+	"name": "mypt",
+	"private": true,
+	"workspaces": [
+		"apps/*",
+		"service/*"
+	],
+	"dependencies": {
+		"@ai-sdk/openai": "^2.0.53",
+		"@ai-sdk/react": "^2.0.76",
+		"@google-cloud/speech": "^7.2.1",
+		"@nanostores/react": "git+https://github.com/ai/react.git",
+		"ai": "^5.0.76",
+		"typescript": "^5.7.2"
+	}
+}
