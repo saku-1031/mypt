@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>漢字学習アプリ</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📚 漢字学習アプリ</h1>
+      <p class="subtitle">楽しく効果的に漢字を学ぼう！</p>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="list">漢字一覧</button>
+      <button class="tab" data-tab="flashcard">フラッシュカード</button>
+      <button class="tab" data-tab="quiz">クイズ</button>
+      <button class="tab" data-tab="stats">統計</button>
+    </nav>
+
+    <!-- 漢字一覧タブ -->
+    <div id="list" class="tab-content active">
+      <div class="filters">
+        <label>
+          レベル:
+          <select id="levelFilter">
+            <option value="all">すべて</option>
+            <option value="N5">N5</option>
+            <option value="N4">N4</option>
+            <option value="N3">N3</option>
+          </select>
+        </label>
+      </div>
+      <div id="kanjiGrid" class="kanji-grid"></div>
+    </div>
+
+    <!-- フラッシュカードタブ -->
+    <div id="flashcard" class="tab-content">
+      <div class="flashcard-container">
+        <div class="flashcard" id="flashcard">
+          <div class="flashcard-front">
+            <div class="kanji-character" id="flashcardKanji"></div>
+            <button class="flip-btn" onclick="flipCard()">めくる</button>
+          </div>
+          <div class="flashcard-back">
+            <div id="flashcardDetails"></div>
+            <button class="flip-btn" onclick="flipCard()">戻す</button>
+          </div>
+        </div>
+        <div class="flashcard-controls">
+          <button onclick="previousCard()">← 前へ</button>
+          <span id="cardCounter">1 / 12</span>
+          <button onclick="nextCard()">次へ →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- クイズタブ -->
+    <div id="quiz" class="tab-content">
+      <div class="quiz-container">
+        <div id="quizStart">
+          <h2>クイズに挑戦！</h2>
+          <p>漢字の読み方と意味をテストします</p>
+          <label>
+            問題数:
+            <select id="quizCount">
+              <option value="5">5問</option>
+              <option value="10" selected>10問</option>
+              <option value="12">全て (12問)</option>
+            </select>
+          </label>
+          <button class="btn-primary" onclick="startQuiz()">スタート</button>
+        </div>
+
+        <div id="quizQuestion" style="display: none;">
+          <div class="quiz-header">
+            <span id="quizProgress">問題 1 / 10</span>
+            <span id="quizScore">正解: 0</span>
+          </div>
+          <div class="question">
+            <h3 id="questionText"></h3>
+            <div id="questionOptions" class="options"></div>
+          </div>
+        </div>
+
+        <div id="quizResults" style="display: none;">
+          <h2>結果</h2>
+          <div class="results">
+            <div class="score-display">
+              <div class="score-number" id="finalScore"></div>
+              <p id="scoreMessage"></p>
+            </div>
+            <button class="btn-primary" onclick="resetQuiz()">もう一度</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 統計タブ -->
+    <div id="stats" class="tab-content">
+      <div class="stats-container">
+        <h2>学習統計</h2>
+        <div id="statsContent" class="stats-grid"></div>
+      </div>
+    </div>
+
+    <!-- 詳細モーダル -->
+    <div id="detailModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

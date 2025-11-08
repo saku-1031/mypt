@@ -1,0 +1,194 @@
+[
+  {
+    "id": 1,
+    "character": "日",
+    "meanings": ["sun", "day", "日本"],
+    "readings": {
+      "on": ["ニチ", "ジツ"],
+      "kun": ["ひ", "か"]
+    },
+    "examples": [
+      { "word": "日本", "reading": "にほん", "meaning": "Japan" },
+      { "word": "毎日", "reading": "まいにち", "meaning": "every day" },
+      { "word": "休日", "reading": "きゅうじつ", "meaning": "holiday" }
+    ],
+    "strokes": 4,
+    "level": "N5"
+  },
+  {
+    "id": 2,
+    "character": "月",
+    "meanings": ["moon", "month"],
+    "readings": {
+      "on": ["ゲツ", "ガツ"],
+      "kun": ["つき"]
+    },
+    "examples": [
+      { "word": "月曜日", "reading": "げつようび", "meaning": "Monday" },
+      { "word": "一月", "reading": "いちがつ", "meaning": "January" },
+      { "word": "満月", "reading": "まんげつ", "meaning": "full moon" }
+    ],
+    "strokes": 4,
+    "level": "N5"
+  },
+  {
+    "id": 3,
+    "character": "火",
+    "meanings": ["fire"],
+    "readings": {
+      "on": ["カ"],
+      "kun": ["ひ"]
+    },
+    "examples": [
+      { "word": "火曜日", "reading": "かようび", "meaning": "Tuesday" },
+      { "word": "火事", "reading": "かじ", "meaning": "fire (disaster)" },
+      { "word": "花火", "reading": "はなび", "meaning": "fireworks" }
+    ],
+    "strokes": 4,
+    "level": "N5"
+  },
+  {
+    "id": 4,
+    "character": "水",
+    "meanings": ["water"],
+    "readings": {
+      "on": ["スイ"],
+      "kun": ["みず"]
+    },
+    "examples": [
+      { "word": "水曜日", "reading": "すいようび", "meaning": "Wednesday" },
+      { "word": "水泳", "reading": "すいえい", "meaning": "swimming" },
+      { "word": "飲み水", "reading": "のみみず", "meaning": "drinking water" }
+    ],
+    "strokes": 4,
+    "level": "N5"
+  },
+  {
+    "id": 5,
+    "character": "木",
+    "meanings": ["tree", "wood"],
+    "readings": {
+      "on": ["モク", "ボク"],
+      "kun": ["き"]
+    },
+    "examples": [
+      { "word": "木曜日", "reading": "もくようび", "meaning": "Thursday" },
+      { "word": "木材", "reading": "もくざい", "meaning": "lumber" },
+      { "word": "大木", "reading": "たいぼく", "meaning": "large tree" }
+    ],
+    "strokes": 4,
+    "level": "N5"
+  },
+  {
+    "id": 6,
+    "character": "金",
+    "meanings": ["gold", "money", "metal"],
+    "readings": {
+      "on": ["キン", "コン"],
+      "kun": ["かね", "かな"]
+    },
+    "examples": [
+      { "word": "金曜日", "reading": "きんようび", "meaning": "Friday" },
+      { "word": "お金", "reading": "おかね", "meaning": "money" },
+      { "word": "黄金", "reading": "おうごん", "meaning": "gold" }
+    ],
+    "strokes": 8,
+    "level": "N5"
+  },
+  {
+    "id": 7,
+    "character": "土",
+    "meanings": ["soil", "earth"],
+    "readings": {
+      "on": ["ド", "ト"],
+      "kun": ["つち"]
+    },
+    "examples": [
+      { "word": "土曜日", "reading": "どようび", "meaning": "Saturday" },
+      { "word": "土地", "reading": "とち", "meaning": "land" },
+      { "word": "粘土", "reading": "ねんど", "meaning": "clay" }
+    ],
+    "strokes": 3,
+    "level": "N5"
+  },
+  {
+    "id": 8,
+    "character": "山",
+    "meanings": ["mountain"],
+    "readings": {
+      "on": ["サン"],
+      "kun": ["やま"]
+    },
+    "examples": [
+      { "word": "山登り", "reading": "やまのぼり", "meaning": "mountain climbing" },
+      { "word": "富士山", "reading": "ふじさん", "meaning": "Mt. Fuji" },
+      { "word": "火山", "reading": "かざん", "meaning": "volcano" }
+    ],
+    "strokes": 3,
+    "level": "N5"
+  },
+  {
+    "id": 9,
+    "character": "川",
+    "meanings": ["river"],
+    "readings": {
+      "on": ["セン"],
+      "kun": ["かわ"]
+    },
+    "examples": [
+      { "word": "川岸", "reading": "かわぎし", "meaning": "riverbank" },
+      { "word": "河川", "reading": "かせん", "meaning": "rivers" },
+      { "word": "小川", "reading": "おがわ", "meaning": "stream" }
+    ],
+    "strokes": 3,
+    "level": "N5"
+  },
+  {
+    "id": 10,
+    "character": "人",
+    "meanings": ["person", "people"],
+    "readings": {
+      "on": ["ジン", "ニン"],
+      "kun": ["ひと"]
+    },
+    "examples": [
+      { "word": "人間", "reading": "にんげん", "meaning": "human being" },
+      { "word": "日本人", "reading": "にほんじん", "meaning": "Japanese person" },
+      { "word": "一人", "reading": "ひとり", "meaning": "one person" }
+    ],
+    "strokes": 2,
+    "level": "N5"
+  },
+  {
+    "id": 11,
+    "character": "大",
+    "meanings": ["big", "large"],
+    "readings": {
+      "on": ["ダイ", "タイ"],
+      "kun": ["おお"]
+    },
+    "examples": [
+      { "word": "大学", "reading": "だいがく", "meaning": "university" },
+      { "word": "大きい", "reading": "おおきい", "meaning": "big" },
+      { "word": "大切", "reading": "たいせつ", "meaning": "important" }
+    ],
+    "strokes": 3,
+    "level": "N5"
+  },
+  {
+    "id": 12,
+    "character": "小",
+    "meanings": ["small", "little"],
+    "readings": {
+      "on": ["ショウ"],
+      "kun": ["ちい", "こ", "お"]
+    },
+    "examples": [
+      { "word": "小学校", "reading": "しょうがっこう", "meaning": "elementary school" },
+      { "word": "小さい", "reading": "ちいさい", "meaning": "small" },
+      { "word": "小川", "reading": "おがわ", "meaning": "stream" }
+    ],
+    "strokes": 3,
+    "level": "N5"
+  }
+]
